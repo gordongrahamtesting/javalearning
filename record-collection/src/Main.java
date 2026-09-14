@@ -13,7 +13,7 @@ public class Main {
 
         while (running) {
             System.out.println("Enter an Album name: (or type exit to quit)");
-            String albumInput = scanner.nextLine();
+            String albumInput = scanner.nextLine().trim();
             if (albumInput.equalsIgnoreCase("exit")) {
                 System.out.println("Exiting the program, goodbye!");
                 System.out.println();
@@ -21,8 +21,20 @@ public class Main {
             }
             else {
                 System.out.println("Enter the Artist name:");
-                String artistInput = scanner.nextLine();
-                myCollection.add(new Record(albumInput, artistInput));
+                String artistInput = scanner.nextLine().trim();
+
+                // Check for duplicate entries before adding
+                boolean isDuplicate = false;
+                for (Record i : myCollection) {
+                    if (albumInput.equalsIgnoreCase(i.title) && artistInput.equalsIgnoreCase(i.artist)){
+                        isDuplicate = true;
+                        System.out.println("Duplicate record detected, this will not be added");
+                    }
+                }
+                if (!isDuplicate)
+                {
+                    myCollection.add(new Record(albumInput, artistInput));
+                }
             }
         }
         System.out.println("Your record collection:");
