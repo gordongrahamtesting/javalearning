@@ -3,13 +3,13 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Record> myCollection = new ArrayList<>();
+        RecordManager manager = new RecordManager();
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
-        myCollection.add(new Record("For You", "Tatsuro Yamashita"));
-        myCollection.add(new Record("Midnight Cruisin'", "Kingo Hamada"));
-        myCollection.add(new Record("After 5 Clash", "Toshiki Kadomatsu"));
+        manager.addRecord(new Record("For You", "Tatsuro Yamashita"));
+        manager.addRecord(new Record("Midnight Cruisin'", "Kingo Hamada"));
+        manager.addRecord(new Record("After 5 Clash", "Toshiki Kadomatsu"));
 
         while (running) {
             System.out.println("Enter an Album name: (or type exit to quit)");
@@ -23,22 +23,20 @@ public class Main {
                 System.out.println("Enter the Artist name:");
                 String artistInput = scanner.nextLine().trim();
 
-                // Check for duplicate entries before adding
-                boolean isDuplicate = false;
-                for (Record i : myCollection) {
-                    if (albumInput.equalsIgnoreCase(i.title) && artistInput.equalsIgnoreCase(i.artist)){
-                        isDuplicate = true;
-                        System.out.println("Duplicate record detected, this will not be added");
-                    }
-                }
-                if (!isDuplicate)
-                {
-                    myCollection.add(new Record(albumInput, artistInput));
+                Record newRecord = new Record(albumInput, artistInput);
+
+                // Give the record to the manager and let it tell us the result
+                if (manager.addRecord(newRecord)) {
+                    System.out.println("Record added successfully!");
+                } else {
+                    System.out.println("Duplicate record detected, this will not be added.");
                 }
             }
         }
+
         System.out.println("Your record collection:");
-        for (Record record : myCollection) {
+        // Target the manager's list getter method to view the collection
+        for (Record record : manager.getCollection()) {
             System.out.println(record.title + " by " + record.artist);
         }
     }
