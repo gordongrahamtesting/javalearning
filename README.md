@@ -1,0 +1,1 @@
+WIP Java project to produce a record collection by prompting the user for album and artist, rejecting duplicates, removing records from the list (why would you reduce your record collection? but whatever!)
