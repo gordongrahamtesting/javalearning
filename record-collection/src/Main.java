@@ -6,11 +6,6 @@ public class Main {
         RecordManager manager = new RecordManager();
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-
-        manager.addRecord(new Record("For You", "Tatsuro Yamashita"));
-        manager.addRecord(new Record("Midnight Cruisin'", "Kingo Hamada"));
-        manager.addRecord(new Record("After 5 Clash", "Toshiki Kadomatsu"));
-
         while (running) {
             System.out.println("Enter an Album name: (or type exit to quit)");
             String albumInput = scanner.nextLine().trim();
