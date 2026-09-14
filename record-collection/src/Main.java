@@ -1,16 +1,16 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         RecordManager manager = new RecordManager();
+
+        // file load on start up
+        manager.loadFromFile();
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-
-        manager.addRecord(new Record("For You", "Tatsuro Yamashita"));
-        manager.addRecord(new Record("Midnight Cruisin'", "Kingo Hamada"));
-        manager.addRecord(new Record("After 5 Clash", "Toshiki Kadomatsu"));
-
         while (running) {
             System.out.println("Enter an Album name: (or type exit to quit)");
             String albumInput = scanner.nextLine().trim();
@@ -27,6 +27,7 @@ public class Main {
 
                 // Give the record to the manager and let it tell us the result
                 if (manager.addRecord(newRecord)) {
+                    manager.saveToFile();
                     System.out.println("Record added successfully!");
                 } else {
                     System.out.println("Duplicate record detected, this will not be added.");
