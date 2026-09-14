@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,14 +58,16 @@ class RecordManagerTest {
     }
 
     @Test
-    void getCollectionContainsDefaultRecords() {
+    void loadFromExistingFilePopulatesCollection(@TempDir Path tempDir) throws IOException {
         // Arrange
-        RecordManager manager = new RecordManager();
+        Path collectionFile = tempDir.resolve("collection.txt");
+        Files.writeString(collectionFile, "Title|Artist\n");
+        RecordManager manager = new RecordManager(collectionFile);
 
         // Act
-        ArrayList<Record> collection = manager.getCollection();
+        manager.loadFromFile();
 
         // Assert
-        assertFalse(collection.isEmpty());
+        assertFalse(manager.getCollection().isEmpty());
     }
 }
