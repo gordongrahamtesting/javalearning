@@ -1,21 +1,16 @@
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         RecordManager manager = new RecordManager();
-
-        // file load on start up
         try {
-            manager.loadFromFile();
+            manager.loadFromDatabase();
+        } catch (SQLException e) {
+            System.err.println("Failed to load collection from database: " + e.getMessage());
         }
-        catch (IOException exception) {
-            System.out.println("File could not be read, quitting app");
-            System.out.println(exception.getMessage());
-            return;
-        }
-
         runSession(manager, new Scanner(System.in), System.out);
     }
 
@@ -26,11 +21,11 @@ public class Main {
             String albumInput = scanner.nextLine().trim();
             if (albumInput.equalsIgnoreCase("exit")) {
                 try {
-                    manager.saveToFile();
+                    manager.saveToDatabase();
                     output.println("Saving to file and exiting the program, goodbye!");
                     running = false;
-                } catch (IOException e) {
-                    output.println("Saving to file failed, please retry or type exit again at the next prompt to save + quit");
+                } catch (SQLException e) {
+                    System.err.println("Failed to save collection to database: " + e.getMessage());
                 }
             }
             else {
@@ -39,7 +34,6 @@ public class Main {
 
                 Record newRecord = new Record(albumInput, artistInput);
 
-                // Give the record to the manager and let it tell us the result
                 if (manager.addRecord(newRecord)) {
                     output.println("New record added to memory");
                 } else {
